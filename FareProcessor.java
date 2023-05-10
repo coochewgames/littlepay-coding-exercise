@@ -38,5 +38,4 @@ public class FareProcessor {
     public BigDecimal getFare(String startBusStopId, String endBusStopId) {
         return busStopMap.get(startBusStopId).get(endBusStopId);
     }
-
 }

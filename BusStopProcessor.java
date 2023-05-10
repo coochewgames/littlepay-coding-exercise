@@ -1,27 +1,11 @@
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.math.BigDecimal;
 
-import java.time.Instant;
-import java.time.Duration;
 
 public class BusStopProcessor {
     private Map<String, Tap> tapOnMap = new HashMap<>();
-
-    private boolean hasExpiry;
-    private Instant utcProcessing;
-    private int tapOnTimeoutMinutes = 120;
-
-    public BusStopProcessor() {
-        hasExpiry = false;
-    }
-
-    public BusStopProcessor(Instant utcProcessing) {
-        this.utcProcessing = utcProcessing;
-        hasExpiry = (utcProcessing != null );
-    }
 
     public void processTaps(List<Tap> tapList) {
         FareProcessor fareProcessor = new FareProcessor();
@@ -41,10 +25,8 @@ public class BusStopProcessor {
                 Tap tapOn = tapOnMap.get(tap.getPAN());
 
                 if (tapOn == null) {
-                    if (!hasExpiry) {
-                        BigDecimal fare = fareProcessor.getFare(tap.getStopId(), FareProcessor.NO_TAP_OFF);
-                        System.out.println("No tap ON Full Fare: $" + fare);
-                    }
+                    BigDecimal fare = fareProcessor.getFare(tap.getStopId(), FareProcessor.NO_TAP_OFF);
+                    System.out.println("No tap ON Full Fare: $" + fare);
 
                     continue;
                 }
@@ -56,10 +38,6 @@ public class BusStopProcessor {
 
                 tapOnMap.remove(tapOn.getPAN(), tapOn);
             }
-
-            if (hasExpiry) {
-                checkForExpiredTapOn();
-            }
         }
 
         for (Tap tap : tapOnMap.values()) {
@@ -69,21 +47,6 @@ public class BusStopProcessor {
 
         //  Charge full fare for remaining ON taps from starting bus stop
         System.out.println(toString());
-    }
-
-    private void checkForExpiredTapOn() {
-        List<Tap> tapToRemoveList = new ArrayList<>();
-
-        for (Tap tap : tapOnMap.values()) {
-            if (Duration.between(tap.getUTC(), utcProcessing).toMinutes() > tapOnTimeoutMinutes) {
-                tapToRemoveList.add(tap);
-            }
-        }
-
-        for (Tap tap : tapToRemoveList) {
-            //  Charge full fare from starting bus stop
-            tapOnMap.remove(tap.getPAN(), tap);
-        }
     }
 
     @Override

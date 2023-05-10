@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +27,12 @@ public class CSVReader {
             br.readLine();  // Ignore header
 
             String line;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(csvSeparator);
 
                 int id = Integer.parseInt(fields[0].trim());
-                LocalDateTime utcLocal = LocalDateTime.parse(fields[1].trim(), formatter);
-                Instant utc = utcLocal.toInstant(ZoneOffset.UTC);
+                Instant utc = DateHandler.StringToUTC(fields[1].trim());
                 String tapStatus = fields[2].trim();
                 String stopId = fields[3].trim();
                 String companyId = fields[4].trim();
