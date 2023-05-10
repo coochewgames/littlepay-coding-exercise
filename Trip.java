@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 
 public class Trip {
@@ -52,21 +51,44 @@ public class Trip {
         this.status = status;
     }
 
-    public static String header() {
-        return "Started, Finished, DurationSecs, FromStopId, ToStopId, ChargeAmount, CompanyId, BusID, PAN, Status";
+    public Instant getStarted() {
+        return started;
     }
 
-    public String csv() {
-        return DateHandler.InstantToString(started) + ", " +
-                DateHandler.InstantToString(finished) + ", " +
-                durationSecs + ", " +
-                fromStopId.getStopName() + ", " +
-                toStopId.getStopName() + ", " +
-                "$" + chargeAmount.setScale(2, RoundingMode.HALF_UP).toString() + ", " +
-                companyId + ", " +
-                busId + ", " +
-                PAN + ", " +
-                status;
+    public Instant getFinished() {
+        return finished;
+    }
+
+    public long getDurationSecs() {
+        return durationSecs;
+    }
+
+    public BusStop getFromStopId() {
+        return fromStopId;
+    }
+
+    public BusStop getToStopId() {
+        return toStopId;
+    }
+
+    public BigDecimal getChargeAmount() {
+        return chargeAmount;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public String getBusId() {
+        return busId;
+    }
+
+    public String getPAN() {
+        return PAN;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     @Override
