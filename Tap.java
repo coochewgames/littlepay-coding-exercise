@@ -69,7 +69,7 @@ public class Tap {
         return "Tap [ID=" + id +
                 ", DateTimeUTC=" + utc +
                 ", TapType=" + tapStatus +
-                ", StopId=" + stopId +
+                ", StopId=" + stopId.getStopName() +
                 ", CompanyId=" + companyId +
                 ", BusID=" + busId +
                 ", PAN=" + PAN + "]";

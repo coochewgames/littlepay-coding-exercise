@@ -2,7 +2,8 @@ public enum BusStop {
     STOP_1("Stop1"),
     STOP_2("Stop2"),
     STOP_3("Stop3"),
-    NO_TAP_OFF("None");
+    NO_TAP_OFF("No Tap Off"),
+    NO_TAP_ON("No Tap On");
 
     private final String stopName;
 

@@ -13,7 +13,7 @@ public class Trip {
             this.statusName = statusName;
         }
     
-        public String getstatusName() {
+        public String getStatusName() {
             return statusName;
         }
     }
@@ -97,8 +97,8 @@ public class Trip {
                 "started=" + DateHandler.InstantToString(started) +
                 ", finished=" + DateHandler.InstantToString(finished) +
                 ", durationSecs=" + durationSecs +
-                ", fromStopId='" + fromStopId + '\'' +
-                ", toStopId='" + toStopId + '\'' +
+                ", fromStopId='" + fromStopId.getStopName() + '\'' +
+                ", toStopId='" + toStopId.getStopName() + '\'' +
                 ", chargeAmount=" + chargeAmount +
                 ", companyId='" + companyId + '\'' +
                 ", busId='" + busId + '\'' +

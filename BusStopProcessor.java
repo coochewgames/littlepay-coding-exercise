@@ -23,7 +23,6 @@ public class BusStopProcessor {
                     Trip trip = createTrip(tapOn, null, fare);
 
                     tripList.add(trip);
-                    System.out.println("Existing tap ON Full Fare: $" + fare);
                 }
 
                 tapOnMap.put(tap.getPAN(), tap);
@@ -31,19 +30,18 @@ public class BusStopProcessor {
                 Tap tapOn = tapOnMap.get(tap.getPAN());
 
                 if (tapOn == null) {
-                    BigDecimal fare = fareProcessor.getFare(tap.getStopId(), BusStop.NO_TAP_OFF);
+                    BigDecimal fare = fareProcessor.getFare(tap.getStopId(), BusStop.NO_TAP_ON);
                     Trip trip = createTrip(tap, null, fare);
 
                     tripList.add(trip);
-                    System.out.println("No tap ON Full Fare: $" + fare);
                 } else {
                     BigDecimal fare = fareProcessor.getFare(tapOn.getStopId(), tap.getStopId());
                     Trip trip = createTrip(tapOn, tap, fare);
 
                     tripList.add(trip);
-                    System.out.println("On:" + tapOn.getStopId() + " Off:" + tap.getStopId());
-
                     tapOnMap.remove(tapOn.getPAN(), tapOn);
+                    
+                    validateTrip(tapOn, tap);
                 }
             }
         }
@@ -53,12 +51,19 @@ public class BusStopProcessor {
             Trip trip = createTrip(tap, null, fare);
 
             tripList.add(trip);
-            System.out.println("Left ON Full Fare: $" + fare);
         }
 
-        System.out.println(toString());
-
         return tripList;
+    }
+
+    private void validateTrip(Tap tapOn, Tap tapOff) {
+        if (!tapOn.getBusId().equals(tapOff.getBusId())) {
+            System.err.println("Mis-matched bus id (On:" + tapOn.getBusId() + " Off:" + tapOff.getBusId() + ") for a trip using PAN:" + tapOn.getPAN());
+        }
+
+        if (!tapOn.getCompanyId().equals(tapOff.getCompanyId())) {
+            System.err.println("Mis-matched company id (On:" + tapOn.getCompanyId() + " Off:" + tapOff.getCompanyId() + ") for a trip using PAN:" + tapOn.getPAN());
+        }
     }
 
     private Trip createTrip(Tap tapOn, Tap tapOff, BigDecimal fare) {
@@ -76,7 +81,7 @@ public class BusStopProcessor {
             utcOff = tapOff.getUTC();
             duration = Duration.between(tapOn.getUTC(), tapOff.getUTC());
             offStop = tapOff.getStopId();
-            tripStatus = (tapOn.getBusId() == tapOff.getBusId()) ?
+            tripStatus = (tapOn.getStopId() == tapOff.getStopId()) ?
                 Trip.Status.CANCELLED : Trip.Status.COMPLETED;
         }
 
