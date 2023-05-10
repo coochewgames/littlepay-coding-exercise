@@ -9,7 +9,7 @@ An implementation of the coding exercise provided by LittlePay
  - Given the TapType is provided in the data passed to the script, another process must control the state of a PAN; ie. external software processing the card uses expiry times to denote a default tap off
  - Services do not break down; ie. journeys are not interruped and a passenger always has the option to tap off and can therefore fairly be charged a full fare
  - The file is an autonomous set of data; ie. there is no expected pre-status of a PAN and there are no PANs tap states to be created for another, or subsequent, file to process
- - The data being read in does not require validation; if there were to be validation, then it would be added to the CSVReader and ignore any lines with incorrectly formatted data.
+ - The data being read in does not require validation; if there were to be validation, then it would be added to the CSVReader and ignore any lines with failed data parsing.
 
 # Building the Script
 
