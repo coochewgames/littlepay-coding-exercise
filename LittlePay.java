@@ -19,9 +19,9 @@ public class LittlePay {
         try {
             CSVReader csvReader = new CSVReader(filename, separator);
             List<Tap> tapList = csvReader.readCSVFile();
-            BusStopProcessor bus = new BusStopProcessor();
+            BusStopProcessor bsp = new BusStopProcessor();
 
-            bus.processTaps(tapList);
+            bsp.processTaps(tapList);
         } catch (IOException ioe) {
             System.err.println("Error reading CSV file (" + filename + "): " + ioe.getMessage());
             System.exit(10);

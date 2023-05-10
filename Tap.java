@@ -9,7 +9,7 @@ public class Tap {
     private final int id;
     private final Instant utc;
     private final TapStatus tapStatus;
-    private final String stopId;
+    private final BusStop stopId;
     private final String companyId;
     private final String busId;
     private final String PAN;
@@ -18,7 +18,7 @@ public class Tap {
             int id,
             Instant utc,
             String tapStatusString,
-            String stopId,
+            BusStop stopId,
             String companyId,
             String busId,
             String PAN) throws IllegalArgumentException {
@@ -48,7 +48,7 @@ public class Tap {
         return tapStatus;
     }
 
-    public String getStopId() {
+    public BusStop getStopId() {
         return stopId;
     }
 

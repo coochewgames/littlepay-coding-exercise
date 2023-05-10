@@ -32,9 +32,9 @@ public class CSVReader {
                 String[] fields = line.split(csvSeparator);
 
                 int id = Integer.parseInt(fields[0].trim());
-                Instant utc = DateHandler.StringToUTC(fields[1].trim());
+                Instant utc = DateHandler.StringToInstant(fields[1].trim());
                 String tapStatus = fields[2].trim();
-                String stopId = fields[3].trim();
+                BusStop stopId = BusStop.fromValue(fields[3].trim());
                 String companyId = fields[4].trim();
                 String busId = fields[5].trim();
                 String PAN = fields[6].trim();
