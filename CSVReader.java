@@ -20,7 +20,7 @@ public class CSVReader {
         this.filename = filename;
     }
 
-    public List<Tap> readCSVFile() throws IOException, java.time.format.DateTimeParseException {
+    public List<Tap> readCSVFile() throws Exception {
         List<Tap> tapRecordList = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {

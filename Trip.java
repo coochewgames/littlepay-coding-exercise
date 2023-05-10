@@ -52,7 +52,7 @@ public class Trip {
         this.status = status;
     }
 
-    public String header() {
+    public static String header() {
         return "Started, Finished, DurationSecs, FromStopId, ToStopId, ChargeAmount, CompanyId, BusID, PAN, Status";
     }
 
@@ -60,8 +60,8 @@ public class Trip {
         return DateHandler.InstantToString(started) + ", " +
                 DateHandler.InstantToString(finished) + ", " +
                 durationSecs + ", " +
-                fromStopId + ", " +
-                toStopId + ", " +
+                fromStopId.getStopName() + ", " +
+                toStopId.getStopName() + ", " +
                 "$" + chargeAmount.setScale(2, RoundingMode.HALF_UP).toString() + ", " +
                 companyId + ", " +
                 busId + ", " +

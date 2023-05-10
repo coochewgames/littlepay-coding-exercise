@@ -11,7 +11,7 @@ public class BusStopProcessor {
     private Map<String, Tap> tapOnMap = new HashMap<>();
     private List<Trip> tripList = new ArrayList<>();
 
-    public void processTaps(List<Tap> tapList) {
+    public List<Trip> processTaps(List<Tap> tapList) {
         FareProcessor fareProcessor = new FareProcessor();
 
         for (Tap tap: tapList) {
@@ -56,8 +56,9 @@ public class BusStopProcessor {
             System.out.println("Left ON Full Fare: $" + fare);
         }
 
-        //  Charge full fare for remaining ON taps from starting bus stop
         System.out.println(toString());
+
+        return tripList;
     }
 
     private Trip createTrip(Tap tapOn, Tap tapOff, BigDecimal fare) {
