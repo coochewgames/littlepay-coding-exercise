@@ -34,16 +34,6 @@ public class FareProcessor {
     }
 
     public BigDecimal getFare(BusStop startBusStopId, BusStop endBusStopId) {
-        BigDecimal fare = new BigDecimal("0.00");
-
-        if (busStopMap.containsKey(startBusStopId)) {
-            Map<BusStop, BigDecimal> innerMap = busStopMap.get(startBusStopId);
-
-            if (innerMap.containsKey(endBusStopId)) {
-                fare = innerMap.get(endBusStopId);
-            }
-        }
-
-        return fare;
+        return busStopMap.get(startBusStopId).get(endBusStopId);
     }
 }

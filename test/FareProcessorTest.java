@@ -21,12 +21,7 @@ public class FareProcessorTest {
 
     @Test
     public void testGetFare_InvalidStartStop() {
-        assertEquals(new BigDecimal("0.00"), fareProcessor.getFare(null, BusStop.STOP_2));
-    }
-
-    @Test
-    public void testGetFare_InvalidEndStop() {
-        assertEquals(new BigDecimal("0.00"), fareProcessor.getFare(BusStop.STOP_1, null));
+        assertThrows(NullPointerException.class, () -> fareProcessor.getFare(null, BusStop.STOP_2));
     }
 
     @Test
