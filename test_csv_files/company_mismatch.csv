@@ -1,0 +1,3 @@
+ID, DateTimeUTC, TapType, StopId, CompanyId, BusID, PAN
+1, 22-01-2018 13:15:00, ON, Stop1, Company1, Bus37, 5454545454545454
+2, 22-01-2018 13:20:00, OFF, Stop2, Company2, Bus37, 5454545454545454

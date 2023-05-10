@@ -28,7 +28,7 @@ public class FareProcessor {
         fareMap_stop3.put(BusStop.STOP_1, new BigDecimal("7.30"));
         fareMap_stop3.put(BusStop.STOP_2, new BigDecimal("5.50"));
         fareMap_stop3.put(BusStop.STOP_3, new BigDecimal("0.00"));
-        fareMap_stop2.put(BusStop.NO_TAP_ON, new BigDecimal("7.30"));
+        fareMap_stop3.put(BusStop.NO_TAP_ON, new BigDecimal("7.30"));
         fareMap_stop3.put(BusStop.NO_TAP_OFF, new BigDecimal("7.30"));
         busStopMap.put(BusStop.STOP_3, fareMap_stop3);
     }

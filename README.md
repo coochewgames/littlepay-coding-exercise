@@ -9,6 +9,7 @@ An implementation of the coding exercise provided by LittlePay
  - Given the TapType is provided in the data passed to the script, another process must control the state of a PAN; ie. external software processing the card uses expiry times to denote a default tap off
  - Services do not break down; ie. journeys are not interruped and a passenger always has the option to tap off and can therefore fairly be charged a full fare
  - The file is an autonomous set of data; ie. there is no expected pre-status of a PAN and there are no PANs tap states to be created for another, or subsequent, file to process
+ - The data being read in does not require validation; if there were to be validation, then it would be added to the CSVReader and ignore any lines with incorrectly formatted data.
 
 # Building the Script
 
@@ -35,7 +36,7 @@ java -jar junit-platform-console-standalone-1.9.3.jar --class-path bin --scan-cl
 The script to process the fares is run from the command line using the following:
 
 ```bash
-Usage: java LittlePay <taps CSV input filename> [separator] [trips CSV output filename]
+java -cp bin LittlePay <taps CSV input filename> [separator] [trips CSV output filename]
 ```
 
 #### ```taps CSV input filename```
@@ -69,3 +70,6 @@ As this is an autonomous process, the remaining PANs that are currently tapped o
 The FareProcessor has been developed for an efficient lookup, entailing an expanded initial data configuration.  This is to facilitate longer single setup but a quicker locating of the iterative fare lookup; as the data is determined to be well-formed in the source file, there is no additional validation on an invalid stop id being passed in.
 
 In a more expandable design, the data would not be stored internally but in a separate data source.
+
+## Notes
+The exercise states that the tap on and off is at the bus stop but the data contains a bus id, which does not really correlate as the tap on and off would have to be on the bus itself to provide that data.

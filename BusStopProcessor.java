@@ -30,7 +30,8 @@ public class BusStopProcessor {
                 Tap tapOn = tapOnMap.get(tap.getPAN());
 
                 if (tapOn == null) {
-                    System.err.println("There is a tap off with no tap on for a trip using PAN:" + tap.getPAN());
+                    System.err.println("There is a tap off with no tap on for a trip at " +
+                        tap.getStopId().getStopName() + " using PAN:" + tap.getPAN());
 
                     BigDecimal fare = fareProcessor.getFare(tap.getStopId(), BusStop.NO_TAP_ON);
                     Trip trip = createTrip(tap, null, fare);
