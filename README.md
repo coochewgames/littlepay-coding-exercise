@@ -14,7 +14,7 @@ An implementation of the coding exercise provided by LittlePay
 # Building the Script
 
 ## Command Line Arguments
-The java source files are contained within the main directory and the JUnit test files are located in a ```test``` subdirectory.  A separate ```bin``` directory is utilised for storing the class files.
+The java source files are contained within the main directory and the JUnit test files are located in a ```test``` subdirectory.  A separate ```bin``` subdirectory is utilised for storing all the generated class files.
 
 The script and tests can be compiled with:
 ```bash
@@ -28,6 +28,9 @@ From the main directory, the tests can be executed with the following command:
 ```bash
 java -jar junit-platform-console-standalone-1.9.3.jar --class-path bin --scan-class-path
 ```
+
+## End-to-End Tests
+As well as a set of automated unit tests, a set of test files have been created to allow the script to be run with disparate sets of data containing expected fail points.  These have been stored in the ```test_csv_files``` subdirectory.
 
 # Running the Script
 
@@ -67,7 +70,9 @@ This entails an issue in the status handling of the external software providing 
 As this is an autonomous process, the remaining PANs that are currently tapped on will be charged a full fare.
 
 # Design decisions
-The FareProcessor has been developed for an efficient lookup, entailing an expanded initial data configuration.  This is to facilitate longer single setup but a quicker locating of the iterative fare lookup; as the data is determined to be well-formed in the source file, there is no additional validation on an invalid stop id being passed in.
+The FareProcessor has been developed for an efficient lookup, entailing an expanded initial data configuration.  This is to facilitate longer single setup but a quicker iterative fare lookup; as the data is determined to be well-formed in the source file, there is no additional validation on an invalid stop id being passed in.
+
+The fare processor is external to the bus stop processing to allow different fare processors to be utilised; is not particularly necessary for the example but allows for more flexibility.
 
 In a more expandable design, the data would not be stored internally but in a separate data source.
 
