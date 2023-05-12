@@ -25,7 +25,8 @@ public class LittlePay {
         try {
             CSVReader csvReader = new CSVReader(tapsFilename, separator);
             List<Tap> tapList = csvReader.readCSVFile();
-            BusStopProcessor bsp = new BusStopProcessor();
+            FareProcessor fareProcessor = new FareProcessor();
+            BusStopProcessor bsp = new BusStopProcessor(fareProcessor);
 
             tapsFilename = tripFilename;
             List<Trip> tripList = bsp.processTaps(tapList);

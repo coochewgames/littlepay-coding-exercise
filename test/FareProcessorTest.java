@@ -37,4 +37,11 @@ public class FareProcessorTest {
         assertEquals(new BigDecimal("5.50"), fareProcessor.getFare(BusStop.STOP_2, BusStop.NO_TAP_OFF));
         assertEquals(new BigDecimal("7.30"), fareProcessor.getFare(BusStop.STOP_3, BusStop.NO_TAP_OFF));
     }
+
+    @Test
+    public void testGetFare_NoTapOn() {
+        assertEquals(new BigDecimal("7.30"), fareProcessor.getFare(BusStop.STOP_1, BusStop.NO_TAP_ON));
+        assertEquals(new BigDecimal("5.50"), fareProcessor.getFare(BusStop.STOP_2, BusStop.NO_TAP_ON));
+        assertEquals(new BigDecimal("7.30"), fareProcessor.getFare(BusStop.STOP_3, BusStop.NO_TAP_ON));
+    }
 }

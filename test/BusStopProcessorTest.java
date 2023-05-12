@@ -15,11 +15,11 @@ public class BusStopProcessorTest {
 
     @BeforeEach
     public void setUp() {
-        busStopProcessor = new BusStopProcessor();
+        busStopProcessor = new BusStopProcessor(new FareProcessor());
     }
 
     @Test
-    public void testProcessTapsPositive() {
+    public void testProcessTripTaps() {
         List<Tap> tapList = Arrays.asList(
                 new Tap(1, Instant.parse("2020-01-01T10:00:00Z"), "ON", BusStop.STOP_1, "Company1", "Bus1", "PAN1"),
                 new Tap(2, Instant.parse("2020-01-01T10:05:00Z"), "OFF", BusStop.STOP_2, "Company1", "Bus1", "PAN1"),
@@ -43,44 +43,37 @@ public class BusStopProcessorTest {
     }
 
     @Test
-    public void testProcessTapsNegative() {
-        List<Tap> tapList = Arrays.asList(
-                new Tap(1, Instant.parse("2020-01-01T10:00:00Z"), "ON", BusStop.STOP_1, "Company1", "Bus1", "PAN1"),
-                new Tap(2, Instant.parse("2020-01-01T10:05:00Z"), "OFF", BusStop.STOP_2, "Company1", "Bus2", "PAN1"),
-                new Tap(3, Instant.parse("2020-01-01T10:10:00Z"), "ON", BusStop.STOP_2, "Company1", "Bus1", "PAN2"),
-                new Tap(4, Instant.parse("2020-01-01T10:15:00Z"), "OFF", BusStop.STOP_3, "Company2", "Bus1", "PAN2")
-        );
-    
+    public void testProcessCancelledTaps() {
+        Tap tap1 = new Tap(1, Instant.parse("2020-01-01T10:20:00Z"), "ON", BusStop.STOP_1, "Company1", "Bus1", "PAN3");
+        Tap tap2 = new Tap(2, Instant.parse("2020-01-01T10:25:00Z"), "OFF", BusStop.STOP_1, "Company1", "Bus1", "PAN3");
+
+        List<Tap> tapList = Arrays.asList(tap1, tap2);
         List<Trip> tripList = busStopProcessor.processTaps(tapList);
-    
-        assertEquals(2, tripList.size());
-    
+
+        assertEquals(1, tripList.size(), "Expected 1 trip to be processed");
+
         Trip trip1 = tripList.get(0);
-        assertEquals(Trip.Status.COMPLETED, trip1.getStatus());
-        assertEquals(new BigDecimal("3.25"), trip1.getChargeAmount());
-        assertEquals(Duration.ofMinutes(5).toSeconds(), trip1.getDurationSecs());
-    
-        Trip trip2 = tripList.get(1);
-        assertEquals(Trip.Status.COMPLETED, trip2.getStatus());
-        assertEquals(new BigDecimal("5.50"), trip2.getChargeAmount());
-        assertEquals(Duration.ofMinutes(5).toSeconds(), trip2.getDurationSecs());
+        assertEquals(Trip.Status.CANCELLED, trip1.getStatus(), "Expected trip1 to have a status of CANCELLED");
+        assertEquals(new BigDecimal("0.00"), trip1.getChargeAmount(), "Expected trip1 to have a fare of $0.00");
     }
 
     @Test
-    public void testProcessTaps() {
-        Tap tap1 = new Tap(5, Instant.parse("2020-01-01T10:20:00Z"), "ON", BusStop.STOP_1, "Company1", "Bus1", "PAN3");
-        Tap tap2 = new Tap(6, Instant.parse("2020-01-01T10:25:00Z"), "OFF", BusStop.STOP_1, "Company1", "Bus1", "PAN3");
+    public void testProcessIncompleteTaps() {
+        Tap tap1 = new Tap(1, Instant.parse("2020-01-01T10:20:00Z"), "ON", BusStop.STOP_1, "Company1", "Bus1", "PAN3");
+        Tap tap2 = new Tap(2, Instant.parse("2020-01-01T10:30:00Z"), "ON", BusStop.STOP_2, "Company2", "Bus2", "PAN4");
 
         List<Tap> tapList = Arrays.asList(tap1, tap2);
+        List<Trip> tripList = busStopProcessor.processTaps(tapList);
 
-        BusStopProcessor processor = new BusStopProcessor();
-        List<Trip> tripList = processor.processTaps(tapList);
-
-        assertEquals(1, tripList.size(), "Expected 3 trips to be processed");
+        assertEquals(2, tripList.size(), "Expected 2 trips to be processed");
 
         Trip trip1 = tripList.get(0);
-        assertEquals(Trip.Status.CANCELLED, trip1.getStatus(), "Expected trip3 to have a status of CANCELLED");
-        assertEquals(new BigDecimal("0.00"), trip1.getChargeAmount(), "Expected trip3 to have a fare of $0.00");
+        assertEquals(Trip.Status.INCOMPLETED, trip1.getStatus(), "Expected trip1 to have a status of INCOMPLETE");
+        assertEquals(new BigDecimal("7.30"), trip1.getChargeAmount(), "Expected trip1 to have a fare of $7.30");
+
+        Trip trip2 = tripList.get(1);
+        assertEquals(Trip.Status.INCOMPLETED, trip2.getStatus(), "Expected trip2 to have a status of INCOMPLETE");
+        assertEquals(new BigDecimal("5.50"), trip2.getChargeAmount(), "Expected trip2 to have a fare of $5.50");
     }
 }
     

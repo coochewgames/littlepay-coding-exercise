@@ -1,6 +1,8 @@
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -10,10 +12,20 @@ import java.time.Instant;
 public class BusStopProcessor {
     private Map<String, Tap> tapOnMap = new HashMap<>();
     private List<Trip> tripList = new ArrayList<>();
+    private FareProcessor fareProcessor;
+
+    BusStopProcessor(FareProcessor fareProcessor) {
+        this.fareProcessor = fareProcessor;
+    }
 
     public List<Trip> processTaps(List<Tap> tapList) {
-        FareProcessor fareProcessor = new FareProcessor();
+        processTapList(tapList);
+        processRemainingTapOns();
 
+        return tripList;
+    }
+
+    private void processTapList(List<Tap> tapList) {
         for (Tap tap: tapList) {
             if (tap.getTapStatus() == Tap.TapStatus.ON) {
                 Tap tapOn = tapOnMap.get(tap.getPAN());
@@ -48,15 +60,6 @@ public class BusStopProcessor {
                 }
             }
         }
-
-        for (Tap tap : tapOnMap.values()) {
-            BigDecimal fare = fareProcessor.getFare(tap.getStopId(), BusStop.NO_TAP_OFF);
-            Trip trip = createTrip(tap, null, fare);
-
-            tripList.add(trip);
-        }
-
-        return tripList;
     }
 
     private void validateTrip(Tap tapOn, Tap tapOff) {
@@ -66,6 +69,18 @@ public class BusStopProcessor {
 
         if (!tapOn.getCompanyId().equals(tapOff.getCompanyId())) {
             System.err.println("Mis-matched company id (On:" + tapOn.getCompanyId() + " Off:" + tapOff.getCompanyId() + ") for a trip using PAN:" + tapOn.getPAN());
+        }
+    }
+
+    private void processRemainingTapOns() {
+        List<Tap> tapList = new ArrayList<>(tapOnMap.values());
+        Collections.sort(tapList, Comparator.comparing(Tap::getUTC));
+
+        for (Tap tap : tapList) {
+            BigDecimal fare = fareProcessor.getFare(tap.getStopId(), BusStop.NO_TAP_OFF);
+            Trip trip = createTrip(tap, null, fare);
+
+            tripList.add(trip);
         }
     }
 
